@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.santbob.locationhelper.LocationConfig;
 import com.santbob.locationhelper.LocationHelper;
 import com.santbob.permissionhelper.PermissionHelper;
 
@@ -21,6 +22,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private LocationHelper locationHelper;
     private PermissionHelper permissionHelper;
 
+    private Button requestLocationBtn, stopLocationUpdatesBtn;
+
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 10;
 
     @Override
@@ -28,9 +31,10 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        locationHelper = new LocationHelper(this);
+        locationHelper = new LocationHelper(this, new LocationConfig(1000, 500, LocationConfig.Priority.PRIORITY_HIGH_ACCURACY, true));
         permissionHelper = new PermissionHelper(this, this);
-        Button requestLocationBtn = findViewById(R.id.request_current_location_button);
+
+        requestLocationBtn = findViewById(R.id.request_current_location_button);
         requestLocationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -38,11 +42,25 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 permissionHelper.requestPermission(Manifest.permission.ACCESS_FINE_LOCATION, LOCATION_PERMISSION_REQUEST_CODE);
             }
         });
+
+        stopLocationUpdatesBtn = findViewById(R.id.stop_location_updates_button);
+        stopLocationUpdatesBtn.setVisibility(View.GONE);
+        stopLocationUpdatesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                locationHelper.stopLocationUpdates();
+                locationInfoText.setText(R.string.location_placeholder);
+                requestLocationBtn.setVisibility(View.VISIBLE);
+                stopLocationUpdatesBtn.setVisibility(View.GONE);
+            }
+        });
         locationInfoText = findViewById(R.id.location_info);
     }
 
     @Override
     public void OnPermissionGranted(String permission, int requestCode) {
+        requestLocationBtn.setVisibility(View.GONE);
+        stopLocationUpdatesBtn.setVisibility(View.VISIBLE);
         locationHelper.requestLocationUpdate(new LocationHelper.LocationHelperListener() {
             @Override
             public void onLocationIdentified(Location location) {

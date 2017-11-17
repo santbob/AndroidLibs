@@ -6,4 +6,5 @@
     <string name="location_permission_denied_never_ask">To find your current location information, please enable Location permission for the app in Settings.</string>
     <string name="location_permission_denied">Location Permission is needed to find your current location info, please enable Location permission for the app in Settings.</string>
     <string name="current_location">Request Location</string>
+    <string name="stop">Stop</string>
 </resources>

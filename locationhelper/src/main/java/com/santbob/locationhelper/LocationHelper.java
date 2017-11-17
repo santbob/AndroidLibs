@@ -41,16 +41,7 @@ public class LocationHelper {
      * Constant used in the location settings dialog.
      */
     private static final int REQUEST_CHECK_SETTINGS = 0x1;
-    /**
-     * The desired interval for location updates. Inexact. Updates may be more or less frequent.
-     */
-    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
-    /**
-     * The fastest rate for active location updates. Exact. Updates will never be more frequent
-     * than this value.
-     */
-    private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS =
-            UPDATE_INTERVAL_IN_MILLISECONDS / 2;
+
     private final FusedLocationProviderClient fusedLocationClient;
     private final SettingsClient settingsClient;
     private LocationHelperListener locationHelperListener;
@@ -69,13 +60,20 @@ public class LocationHelper {
      */
     private LocationCallback mLocationCallback;
 
+    private LocationConfig locationConfig;
+
     /**
      * Time when the location was updated represented as a String.
      */
     private int updateCount;
 
     public LocationHelper(Activity activity) {
+        this(activity, new LocationConfig());
+    }
+
+    public LocationHelper(Activity activity, LocationConfig locationConfig) {
         this.activity = activity;
+        this.locationConfig = locationConfig;
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity);
         settingsClient = LocationServices.getSettingsClient(activity);
         // Kick off the process of building the LocationCallback, LocationRequest, and
@@ -105,13 +103,13 @@ public class LocationHelper {
         // inexact. You may not receive updates at all if no location sources are available, or
         // you may receive them slower than requested. You may also receive updates faster than
         // requested if other applications are requesting location at a faster interval.
-        mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
+        mLocationRequest.setInterval(locationConfig.getUpdateInterval());
 
         // Sets the fastest rate for active location updates. This interval is exact, and your
         // application will never receive updates faster than this value.
-        mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
+        mLocationRequest.setFastestInterval(locationConfig.getFastestUpdateInterval());
 
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setPriority(locationConfig.getRequestPriority());
     }
 
     /**
@@ -123,12 +121,16 @@ public class LocationHelper {
             public void onLocationResult(LocationResult locationResult) {
                 super.onLocationResult(locationResult);
                 updateCount++;
-                if (locationHelperListener != null && locationResult.getLastLocation() != null) {
+                if (locationHelperListener != null) {
+                    Location identifiedLocation = locationResult.getLastLocation();
+                    //if just one location update is good enough, check if the location is identified or wait for max 3 updates.
+                    if (!locationConfig.isShouldRequestRegularUpdates() && (identifiedLocation != null || updateCount > 3)) {
+                        stopLocationUpdates();
+                    }
+                    locationHelperListener.onLocationIdentified(identifiedLocation);
+                } else {
+                    //when there no listener, stop location updates.
                     stopLocationUpdates();
-                    locationHelperListener.onLocationIdentified(locationResult.getLastLocation());
-                } else if (updateCount > 3) {
-                    stopLocationUpdates();
-                    locationHelperListener.onLocationIdentified(null);
                 }
             }
         };
@@ -196,7 +198,7 @@ public class LocationHelper {
     /**
      * Removes location updates from the FusedLocationApi.
      */
-    private void stopLocationUpdates() {
+    public void stopLocationUpdates() {
         // It is a good practice to remove location requests when the activity is in a paused or
         // stopped state. Doing so helps battery performance and is especially
         // recommended in applications that request frequent location updates.
