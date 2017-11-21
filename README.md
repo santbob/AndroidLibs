@@ -20,7 +20,13 @@ or Gradle:
 compile 'com.github.santbob.AndroidLibs:0.1.0'
 ```
 
-*if you dont have jitpack in the your project settings already, please add the following*
+## Example
+
+Example app is at the root of this repo, please refer [MainActivity.java](app/src/main/java/com/santbob/androidlibs_sampleapp/MainActivity.java) or clone/download this repo to see it in action.
+
+## JitPack
+
+The libarry is distrubuted via jitpack, if you dont have jitpack in the your project settings already, please add the following
 
 via Maven - Add the JitPack repository to your build file 
 ```xml
