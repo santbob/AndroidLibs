@@ -12,16 +12,16 @@ via Maven:
 ```xml
 <dependency>
   <groupId>com.github.santbob.AndroidLibs</groupId>
-  <artifactId>locationhelper</artifactId>
-  <version>0.1.1</version>
+  <artifactId>permissionhelper</artifactId>
+  <version>0.1.0</version>
 </dependency>
 ```
 or Gradle:
 ```groovy
-compile 'com.github.santbob.AndroidLibs:locationhelper:0.1.1'
+compile 'com.github.santbob.AndroidLibs:permissionhelper:0.1.1'
 ```
 
-*if you already dont have jitpack in the your gradle, please add the following*
+*if you dont have jitpack in the your project settings already, please add the following*
 
 via Maven - Add the JitPack repository to your build file 
 ```xml
