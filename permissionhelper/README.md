@@ -21,7 +21,42 @@ or Gradle:
 compile 'com.github.santbob.AndroidLibs:permissionhelper:0.1.1'
 ```
 
-*if you dont have jitpack in the your project settings already, please add the following*
+## How to Use
+
+```java
+PermissionHelper permissionHelper = new PermissionHelper(this, new PermissionHelper.PermissionHelperListener() {
+    @Override
+    public void OnPermissionGranted(String permission, int requestCode) {
+        //yippe, your app has been granted the permission, go ahead and do something useful with it.
+    }
+
+    @Override
+    public void OnPermissionDenied(String permission, int requestCode) {
+      //Argh! Permission denied, decide what to do next, may be give feature which doesnt require this permission.
+    }
+
+    @Override
+    public void OnShowRationale(String permission, int requestCode) {
+      //Show a message, why you are asking for this permission and then upon the user accepting the message request permission again this time without the rationale check.
+    }
+
+    @Override
+    public void OnNeverAskAgain(String permission, int requestCode) {
+      //Argh! user has denied permission and has selected never show again! 
+    }
+});
+
+//Requesting permission with Rationale Check
+permissionHelper.requestPermission(Manifest.permission.ACCESS_FINE_LOCATION, LOCATION_PERMISSION_REQUEST_CODE);
+
+//requesting permission without Rationale Check
+permissionHelper.requestPermissionWithoutRationalCheck(Manifest.permission.ACCESS_FINE_LOCATION, LOCATION_PERMISSION_REQUEST_CODE);
+```        
+
+
+## JitPack
+
+The libarry is distrubuted via jitpack, if you dont have jitpack in the your project settings already, please add the following
 
 via Maven - Add the JitPack repository to your build file 
 ```xml
