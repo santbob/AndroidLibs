@@ -41,6 +41,9 @@ allprojects {
 }
 ```
 
+## Contribution
+Please feel free to send a Pull Request, if there are bugs that you find or want to add features. Also log issues if you see bugs, will try my best to fix ASAP.
+
 ## License
 
     Licensed under the Apache License, Version 2.0 (the "License");
