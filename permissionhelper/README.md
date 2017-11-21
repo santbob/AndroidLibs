@@ -52,7 +52,9 @@ permissionHelper.requestPermission(Manifest.permission.ACCESS_FINE_LOCATION, LOC
 //requesting permission without Rationale Check
 permissionHelper.requestPermissionWithoutRationalCheck(Manifest.permission.ACCESS_FINE_LOCATION, LOCATION_PERMISSION_REQUEST_CODE);
 ```        
+## Example
 
+Example app is at the root of this repo, please refer [MainActivity.java](app/src/main/java/com/santbob/androidlibs_sampleapp/MainActivity.java) or clone/download this repo to see it in action.
 
 ## JitPack
 
