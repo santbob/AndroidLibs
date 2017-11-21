@@ -14,8 +14,47 @@ or Gradle:
 ```groovy
 compile 'com.github.santbob.AndroidLibs:locationhelper:0.1.0'
 ```
+## How to Use
 
-*if you dont have jitpack in the your project settings already, please add the following*
+```java
+
+// Sets the desired interval for active location updates. This interval is inexact. 
+// You may not receive updates at all if no location sources are available, or you may receive them slower than requested. 
+// You may also receive updates faster than requested if other applications are requesting location at a faster interval.
+private static final int UPDATE_INTERVAL_IN_MILLISECONDS = 1000; //1sec
+
+// Sets the fastest rate for active location updates. 
+// This interval is exact, and your application will never receive updates faster than this value.
+private static final int FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = 500; // half a sec
+
+// pass `false` for the last param, if you need just one update (just to get current location), in that case dont need to call stopLocationUpdates.
+// experiement with different values for the accuracy param.
+LocationHelper locationHelper = new LocationHelper(this, new LocationConfig(
+                UPDATE_INTERVAL_IN_MILLISECONDS, 
+                FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS, 
+                LocationConfig.Priority.PRIORITY_HIGH_ACCURACY, 
+                true));
+                
+// To start requesting location updates.
+locationHelper.requestLocationUpdate(new LocationHelper.LocationHelperListener() {
+    @Override
+    public void onLocationIdentified(Location location) {
+        String builder = "Latitude : " + location.getLatitude() +
+                "\nLongitude : " + location.getLongitude();
+        locationInfoText.setText(builder);
+    }
+});
+
+// To Stop requesting location updates
+locationHelper.stopLocationUpdates();
+```        
+## Example
+
+Example app is at the root of this repo, please refer [MainActivity.java](app/src/main/java/com/santbob/androidlibs_sampleapp/MainActivity.java) or clone/download this repo to see it in action.
+
+## JitPack
+
+The libarry is distrubuted via jitpack, if you dont have jitpack in the your project settings already, please add the following
 
 via Maven - Add the JitPack repository to your build file 
 ```xml
@@ -35,6 +74,9 @@ allprojects {
   }
 }
 ```
+
+## Contribution
+Please feel free to send a Pull Request, if there are bugs that you find or want to add features. Also log issues if you see bugs, will try my best to fix ASAP.
 
 ## License
 
