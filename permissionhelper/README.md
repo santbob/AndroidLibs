@@ -13,12 +13,12 @@ via Maven:
 <dependency>
   <groupId>com.github.santbob.AndroidLibs</groupId>
   <artifactId>permissionhelper</artifactId>
-  <version>0.1.2</version>
+  <version>0.1.3</version>
 </dependency>
 ```
 or Gradle:
 ```groovy
-compile 'com.github.santbob.AndroidLibs:permissionhelper:0.1.2'
+compile 'com.github.santbob.AndroidLibs:permissionhelper:0.1.3'
 ```
 
 ## How to Use
