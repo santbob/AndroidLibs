@@ -26,12 +26,21 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 10;
 
+    // Sets the desired interval for active location updates. This interval is
+    // inexact. You may not receive updates at all if no location sources are available, or
+    // you may receive them slower than requested. You may also receive updates faster than
+    // requested if other applications are requesting location at a faster interval.
+    private static final int UPDATE_INTERVAL_MILLI_SECS = 1000;
+    // Sets the fastest rate for active location updates. This interval is exact, and your
+    // application will never receive updates faster than this value.
+    private static final int FASTEST_UPDATE_INTERVAL_MILLI_SECS = 500;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        locationHelper = new LocationHelper(this, new LocationConfig(1000, 500, LocationConfig.Priority.PRIORITY_HIGH_ACCURACY, true));
+        locationHelper = new LocationHelper(this, new LocationConfig(UPDATE_INTERVAL_MILLI_SECS, FASTEST_UPDATE_INTERVAL_MILLI_SECS, LocationConfig.Priority.PRIORITY_HIGH_ACCURACY, true));
         permissionHelper = new PermissionHelper(this, this);
 
         requestLocationBtn = findViewById(R.id.request_current_location_button);
