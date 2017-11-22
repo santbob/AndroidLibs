@@ -7,12 +7,12 @@ via Maven:
 <dependency>
   <groupId>com.github.santbob.AndroidLibs</groupId>
   <artifactId>locationhelper</artifactId>
-  <version>0.1.0</version>
+  <version>0.1.2</version>
 </dependency>
 ```
 or Gradle:
 ```groovy
-compile 'com.github.santbob.AndroidLibs:locationhelper:0.1.0'
+compile 'com.github.santbob.AndroidLibs:locationhelper:0.1.2'
 ```
 ## How to Use
 
